@@ -1,6 +1,6 @@
 # Technical Challenge App
 
-_**Note**_: `SsChallengeApp/scratch.py` ([here](https://github.com/hoovler/SsChallengeApp/blob/master/SsChallengeApp/scratch.py)) contains my initial attempt to familiarize myself with the data and complete the primary requirements; it does NOT reflect the final submission.
+**Note**: [`SsChallengeApp/scratch.py`](https://github.com/hoovler/SsChallengeApp/blob/master/SsChallengeApp/scratch.py) contains my initial attempt to familiarize myself with the data and complete the primary requirements; it does NOT reflect the final submission.
 
 ## Contributing
 
@@ -26,5 +26,4 @@ To build the application into an executable:
 
 ```bash
 $ pip install pyinstaller
-$ 
 ```
