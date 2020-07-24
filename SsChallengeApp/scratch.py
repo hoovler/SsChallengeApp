@@ -24,4 +24,4 @@ teacher_data = teacher_data_full[["cid", "teacher"]]
 merged_data = student_data.merge(teacher_data, how='outer')
 
 # TODO: output as json
-json_data = merged_data.to_json()
+json_data = merged_data.to_json(orient="records", lines=True)
