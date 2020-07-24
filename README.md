@@ -2,6 +2,18 @@
 
 **Note**: [`SsChallengeApp/scratch.py`](https://github.com/hoovler/SsChallengeApp/blob/master/SsChallengeApp/scratch.py) contains my initial attempt to familiarize myself with the data and complete the primary requirements; it does NOT reflect the final submission.
 
+## Usage
+
+1. Download the [latest release](https://github.com/hoovler/SsChallengeApp/releases) for your operating system.
+2. Ensure you have `Python 3.6+` available on your `PATH` by opening a terminal / command prompt and typing: 
+    * `python --version` or `python3 --version` 
+3. Execute the downloaded release by opening a terminal / command prompt and typing: 
+
+```bash
+cd /path/to/downloaded/release
+python <release_filename> -o <output_directory>
+```
+
 ## Contributing
 
 Clone the repository and create a branch off `master`
