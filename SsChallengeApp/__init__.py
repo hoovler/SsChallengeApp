@@ -1,4 +1,5 @@
 """
 __init__.py
 """
-from .app import Student, Teacher
+from .models import AppMeta
+from .app import App

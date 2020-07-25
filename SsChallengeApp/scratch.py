@@ -1,7 +1,7 @@
 """
 scratch.py
-    My initial attempt to familiarize myself with the data files, and complete the bare bones requirements
-    (pre-optimization, etc.)
+    My initial attempt to familiarize myself with the data files, and complete
+    the bare bones requirements (pre-optimization, etc.)
 """
 import pandas as pd
 
@@ -23,5 +23,5 @@ teacher_data = teacher_data_full[["cid", "teacher"]]
 # create merged data
 merged_data = student_data.merge(teacher_data, how='outer')
 
-# TODO: output as json
+# convert merged set to json
 json_data = merged_data.to_json(orient="records", lines=True)

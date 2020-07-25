@@ -1,55 +1,89 @@
 """
-app.py
+app.py: The file containing the application's primary execution
 """
-import csv
+from SsChallengeApp import AppMeta
+from pathlib import Path
+from datetime import datetime
+import pandas as pd
 
 
-class Student:
+class App:
     """
-    Student class
+    App: The class responsible for executing the core application requirements
     """
+    # class constants
+    LNAME = "lname"
+    FNAME = "fname"
+    CID = "cid"
+    STUDENT = "student"
+    TEACHER = "teacher"
 
-    keys = {
-        "student_id": "id",
-        "firstname": "fname",
-        "lastname": "lname",
-        "email": "email",
-        "ssn": "ssn",
-        "address": "address",
-        "course_id": "cid"
-    }
+    def __init__(self, meta: AppMeta):
+        self.meta = meta
+        self.initial_fields = ["lname", "fname", "cid"]
+        self.student_data = ...
+        self.teacher_data = ...
 
-    def __init__(self, source, delim="_", quotation=csv.QUOTE_NONE, update=False):
+    @classmethod
+    def _get_name(cls, data: pd.DataFrame):
+        return data[cls.LNAME] + ", " + data[cls.FNAME]
+
+    def load(self):
         """
-        :param source: The source file containing student data.
-        :param delim: The delimiter character used to separate values. *Optional, default="_"*
-        :param quotation: The quote character used to group values the might contain the delimiter; *Optional, default=csv.QUOTE_NONE*
-        :param update: If `True`, will pull a fresh copy of the data from its Github repository; *Optional, default=False*
+        Load the initial data into memory; this method takes care to utilize memory resources in a responsible manner,
+        and ensures all file handles are closed before the method returns success.
+        :return:
         """
-        self.update = update
-        self.source = source
-        self.delim = delim
-        self.quotation = quotation
+        if self.meta.verbose:
+            print("in App.load()...")
 
-    def _get_value(self, row, column):
-        pass
+        # relevant student data...
+        data = pd.read_csv(self.meta.students, delimiter="_", usecols=self.initial_fields)
+        data["student"] = self._get_name(data)
+        self.student_data = data[["student", self.CID]]
+        if self.meta.verbose:
+            print("--- student data info ---")
+            print(f"{self.student_data.agg}")
+            print("")
 
-    def _get_all(self):
-        pass
+        # relevant teacher data, recycle mem
+        data = pd.read_parquet(self.meta.teachers)
+        data["teacher"] = self._get_name(data)
+        self.teacher_data = data[["teacher", self.CID]]
+        if self.meta.verbose:
+            print("--- student data info ---")
+            print(f"     {self.teacher_data.agg}")
+            print("")
 
-    def _open_reader(self):
-        with open(self.source, 'rb') as f:
-            return csv.reader(f, self.source, delimiter=self.delim, quoting=self.quotation)
+        # not necessary, but can't hurt
+        del data
 
-    @property
-    def firstname(self):
-        return _get_value(student_id, self.keys["firstname"])
+    def execute(self):
+        """
+        Execute the primary requirements of the application
+        :return:
+        """
+        if self.meta.verbose:
+            print("in App.execute()...")
 
+        # make output path OS-agnostic
+        outpath = Path(self.meta.output_dir)
+        outpath.mkdir(parents=True, exist_ok=True)
+        outstr = outpath.absolute().__str__()
+        if self.meta.verbose:
+            print(f"     Output directory created: {outstr}")
 
+        # create filename
+        outfile = f"{outstr}/{datetime.now().isoformat(sep='_').replace(':', '.')}_sSChallengeOut.json"
 
-class Teacher:
-    """
-    Teacher class
-    """
-    def __init__(self, source):
-        self.source = source
+        # merge data, convert to JSON, and write to disks
+        self.student_data.merge(self.teacher_data, how='outer').to_json(outfile, orient="records", lines=True)
+        if self.meta.verbose:
+            print(f"     JSON output written to disk: {outfile}")
+
+    def unload(self):
+        """
+        Clean remaining memory and close the application
+        """
+        del self
+        exit(0)

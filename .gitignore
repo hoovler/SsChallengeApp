@@ -1,7 +1,6 @@
-# non-public information
+# specific project files, dirs
 requirements/
-
-# env
+output/
 venv/
 
 # Byte-compiled / optimized / DLL files

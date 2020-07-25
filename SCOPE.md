@@ -63,6 +63,8 @@ I am going to assume that the proper `JSON` output format will be as such:
 
 ## Useful Information
 
+* [Python Style Guide](https://www.python.org/dev/peps/pep-0008/)
+* [Python Apps the Right Way: Entry Points and Scripts](https://chriswarrick.com/blog/2014/09/15/python-apps-the-right-way-entry_points-and-scripts/)
 * [Configuring `__main__.py`, `__init__.py`, etc.](https://stackoverflow.com/questions/44977227/how-to-configure-main-py-init-py-and-setup-py-for-a-basic-package)
 * [Streaming, Serialization, and IPC](https://arrow.apache.org/docs/python/ipc.html)
 * [PyInstaller](https://datatofish.com/executable-pyinstaller/), [2](https://realpython.com/pyinstaller-python/)
