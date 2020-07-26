@@ -1,9 +1,9 @@
 """
 app.py: The file containing the application's primary execution
 """
-from SsChallengeApp import AppMeta
 from pathlib import Path
 from datetime import datetime
+from SsChallengeApp import AppMeta
 import pandas as pd
 
 
@@ -20,6 +20,7 @@ class App:
 
     def __init__(self, meta: AppMeta):
         self.meta = meta
+        self.success = False
         self.initial_fields = ["lname", "fname", "cid"]
         self.student_data = ...
         self.teacher_data = ...
@@ -28,35 +29,12 @@ class App:
     def _get_name(cls, data: pd.DataFrame):
         return data[cls.LNAME] + ", " + data[cls.FNAME]
 
-    def load(self):
+    def is_success(self):
         """
-        Load the initial data into memory; this method takes care to utilize memory resources in a responsible manner,
-        and ensures all file handles are closed before the method returns success.
-        :return:
+        Validate whether the application executed completely and successfully
+        :return: True if application finished without issues
         """
-        if self.meta.verbose:
-            print("in App.load()...")
-
-        # relevant student data...
-        data = pd.read_csv(self.meta.students, delimiter="_", usecols=self.initial_fields)
-        data["student"] = self._get_name(data)
-        self.student_data = data[["student", self.CID]]
-        if self.meta.verbose:
-            print("--- student data info ---")
-            print(f"{self.student_data.agg}")
-            print("")
-
-        # relevant teacher data, recycle mem
-        data = pd.read_parquet(self.meta.teachers)
-        data["teacher"] = self._get_name(data)
-        self.teacher_data = data[["teacher", self.CID]]
-        if self.meta.verbose:
-            print("--- student data info ---")
-            print(f"     {self.teacher_data.agg}")
-            print("")
-
-        # not necessary, but can't hurt
-        del data
+        return self.success
 
     def execute(self):
         """
@@ -70,20 +48,39 @@ class App:
         outpath = Path(self.meta.output_dir)
         outpath.mkdir(parents=True, exist_ok=True)
         outstr = outpath.absolute().__str__()
-        if self.meta.verbose:
-            print(f"     Output directory created: {outstr}")
 
         # create filename
-        outfile = f"{outstr}/{datetime.now().isoformat(sep='_').replace(':', '.')}_sSChallengeOut.json"
+        outfile = f"{outstr}/{datetime.now().isoformat(sep='_').replace(':', '.')}_output.json"
 
-        # merge data, convert to JSON, and write to disks
-        self.student_data.merge(self.teacher_data, how='outer').to_json(outfile, orient="records", lines=True)
+        # load up the teacher data (1 time only)
+        t_data = pd.read_parquet(self.meta.teachers)
+        t_data["teacher"] = self._get_name(t_data)
+        t_data = t_data[["cid", "teacher"]]
+
+        # init loop count
+        chunk_num = 0
+
+        # open output file for writing; Pandas.DF doesn't support output streaming
+        # or appending to files
+        with open(outfile, "a") as file:
+            # start chunking in student data (for chunk_size/total_size iterations)
+            for chunk in pd.read_csv(self.meta.students,
+                                     delimiter="_",
+                                     usecols=self.initial_fields,
+                                     chunksize=self.meta.chunk_size):
+                chunk_num += 1
+                chunk = pd.DataFrame(chunk)
+                chunk["student"] = chunk["lname"] + ", " + chunk["fname"]
+                # merge data, convert to JSON, and append to output file
+                file.write(chunk[["student", "cid"]]
+                           .merge(t_data, how="outer").to_json(orient="records"))
+                # process loop count
+                if self.meta.verbose:
+                    print(f"     chunk #{chunk_num} with {len(chunk)} records...")
+            # close file after all chunks are processed
+            file.close()
+
+        # inform the user!
         if self.meta.verbose:
-            print(f"     JSON output written to disk: {outfile}")
-
-    def unload(self):
-        """
-        Clean remaining memory and close the application
-        """
-        del self
-        exit(0)
+            print(f"     JSON output streamed to disk: {outfile}")
+        self.success = True

@@ -25,8 +25,9 @@ class AppMeta:
     _s = _Arg(("-s", "--students"), f"{_INPUT_DIR}/{_STUDENT_FILE}")
     _t = _Arg(("-t", "--teachers"), f"{_INPUT_DIR}/{_TEACHER_FILE}")
     _o = _Arg(("-o", "--output_dir"), f"{_OUTPUT_DIR}/")
+    _c = _Arg(("-c", "--chunk_size"), 100)
 
-    def __init__(self, args, vals):
+    def __init__(self, args):
         """
         Parse the args (other than -h, --help)
         :param args:
@@ -38,6 +39,7 @@ class AppMeta:
         self.students = self._s.default
         self.teachers = self._t.default
         self.output_dir = self._o.default
+        self.chunk_size = self._c.default
 
         # evaluate arguments
         for this_arg, this_val in args:
@@ -52,6 +54,8 @@ class AppMeta:
                 self.teachers = this_val
             elif this_arg in self._o.switches:
                 self.output_dir = this_val
+            elif this_arg in self._c.switches:
+                self.chunk_size = int(this_val)
             else:
                 if self.verbose:
                     print("no known args... using defaults; to see args list, use:")
@@ -67,10 +71,11 @@ class AppMeta:
         :return:
         """
         print("")
-        print(f"    Verbose:                '{self.verbose}'")
-        print(f"    Student data source:    '{self.students}'")
-        print(f"    Teacher data source:    '{self.teachers}'")
-        print(f"    Output directory:       '{self.output_dir}'")
+        print(f"    Verbose [-v]:               '{self.verbose}'")
+        print(f"    Student data source [-s]:   '{self.students}'")
+        print(f"    Teacher data source [-f]:   '{self.teachers}'")
+        print(f"    Output directory [-o]:      '{self.output_dir}'")
+        print(f"    Chunk size [-c]:            '{self.chunk_size}'")
         print("")
 
     def show_help(self):
@@ -79,8 +84,10 @@ class AppMeta:
         """
         print("")
         print(f"usage: python -m SsChallenge [{self._h.switches}] [{self._v.switches}]")
-        print(f"                             [{self._s.switches} <filename>] [{self._t.switches} <filename>]")
-        print(f"                             [{self._o.switches} <directory>]")
+        print(f"                             [{self._s.switches} <filename>] "
+              f"[{self._t.switches} <filename>]")
+        print(f"                             [{self._o.switches} <directory>] "
+              f"[{self._c.switches} <int>]")
         print("")
         print("If no arguements are provided, the following default values are used:")
         self.show_meta()
@@ -94,7 +101,8 @@ class AppMeta:
             "verbose": self.verbose,
             "students": self.students,
             "teachers": self.teachers,
-            "output_dir": self.output_dir
+            "output_dir": self.output_dir,
+            "chunk_size": self.chunk_size
         }
 
     def as_list(self):
@@ -102,4 +110,4 @@ class AppMeta:
         Convert application metadata into a list
         :return: [self.verbose, self.students, self.teachers, self.output_dir]
         """
-        return [self.verbose, self.students, self.teachers, self.output_dir]
+        return [self.verbose, self.students, self.teachers, self.output_dir, self.chunk_size]

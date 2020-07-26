@@ -1,6 +1,6 @@
 # Data Python Exercise
 
-This exercise is designed to show us your python programming skills.  Although the problem isn't very hard, we would like you to tackle the task the same way you would with a client.  We expect that you provide us with a python application that follows python best practices as defined by the [README](README.md) at the root of the repository. 
+This exercise is designed to show us your python programming skills.  Although the problem isn't very hard, we would like you to tackle the task the same way you would with a client.  We expect that you provide us with a python application that follows python best practices as defined by the [README](../README.md) at the root of the repository. 
 
 The requirements herein are extracted from the following [Data Python Exercise repository](https://github.com/singlestone/data_python_exercise) files, relative to the root `data_python_excercise` directory:
 * [`README.md`](https://github.com/singlestone/data_python_exercise/blob/master/README.md)
