@@ -4,7 +4,7 @@ app.py: The file containing the application's primary execution
 from pathlib import Path
 from datetime import datetime
 from SsChallengeApp import AppMeta
-import pandas as pd
+from pandas import DataFrame, read_parquet, read_csv
 
 
 class App:
@@ -26,7 +26,7 @@ class App:
         self.teacher_data = ...
 
     @classmethod
-    def _get_name(cls, data: pd.DataFrame):
+    def _get_name(cls, data: DataFrame):
         return data[cls.LNAME] + ", " + data[cls.FNAME]
 
     def is_success(self):
@@ -53,7 +53,7 @@ class App:
         outfile = f"{outstr}/{datetime.now().isoformat(sep='_').replace(':', '.')}_output.json"
 
         # load up the teacher data (1 time only)
-        t_data = pd.read_parquet(self.meta.teachers)
+        t_data = read_parquet(self.meta.teachers)
         t_data["teacher"] = self._get_name(t_data)
         t_data = t_data[["cid", "teacher"]]
 
@@ -64,12 +64,12 @@ class App:
         # or appending to files
         with open(outfile, "a") as file:
             # start chunking in student data (for chunk_size/total_size iterations)
-            for chunk in pd.read_csv(self.meta.students,
-                                     delimiter="_",
-                                     usecols=self.initial_fields,
-                                     chunksize=self.meta.chunk_size):
+            for chunk in read_csv(self.meta.students,
+                                  delimiter="_",
+                                  usecols=self.initial_fields,
+                                  chunksize=self.meta.chunk_size):
                 chunk_num += 1
-                chunk = pd.DataFrame(chunk)
+                chunk = DataFrame(chunk)
                 chunk["student"] = chunk["lname"] + ", " + chunk["fname"]
                 # merge data, convert to JSON, and append to output file
                 file.write(chunk[["student", "cid"]]

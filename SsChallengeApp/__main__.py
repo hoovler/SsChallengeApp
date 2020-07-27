@@ -2,7 +2,7 @@
 __main__.py: The file containing the main entry point for the application.
 """
 import getopt
-import sys
+from sys import argv, exit
 from SsChallengeApp import AppMeta, App
 
 
@@ -22,18 +22,19 @@ def main():
         And/Or these without any values:
             -v, --verbose: if present, print debug logging to the console
             -h, --help: if present, print application help and exit
-    :return: Output to the location determined by the 'output' arg
     """
     short_args = "s:t:o:c:vh"
     long_args = ["students=", "teachers=", "output=", "chunk_size=", "verbose", "help"]
 
+    args = None
+
     try:
         # pylint incorrectly assumes 'vals' is unused - it's packaged with
         # 'args' and sent to AppMeta(args)
-        args, vals = getopt.getopt(sys.argv[1:], short_args, long_args)
+        args, vals = getopt.getopt(argv[1:], short_args, long_args)
     except getopt.error as err:
         print(str(err))
-        sys.exit(2)
+        exit(2)
 
     # setup the metadata and app from args, and execute
     meta = AppMeta(args)

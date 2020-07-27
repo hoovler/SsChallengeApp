@@ -2,7 +2,7 @@
 meta.py: The file containing the metadata for the student and teacher models
 """
 from collections import namedtuple
-import sys
+from sys import exit
 
 
 class AppMeta:
@@ -22,8 +22,8 @@ class AppMeta:
     # create expected args and default values
     _h = _Arg(("-h", "--help"), False)
     _v = _Arg(("-v", "--verbose"), False)
-    _s = _Arg(("-s", "--students"), f"{_INPUT_DIR}/{_STUDENT_FILE}")
-    _t = _Arg(("-t", "--teachers"), f"{_INPUT_DIR}/{_TEACHER_FILE}")
+    _s = _Arg(("-s", "--students"), f"{_REMOTE_REPO}/{_STUDENT_FILE}")
+    _t = _Arg(("-t", "--teachers"), f"{_REMOTE_REPO}/{_TEACHER_FILE}")
     _o = _Arg(("-o", "--output_dir"), f"{_OUTPUT_DIR}/")
     _c = _Arg(("-c", "--chunk_size"), 100)
 
@@ -41,25 +41,29 @@ class AppMeta:
         self.output_dir = self._o.default
         self.chunk_size = self._c.default
 
-        # evaluate arguments
-        for this_arg, this_val in args:
-            if this_arg in self._h.switches:
-                self.show_help()
-                sys.exit(0)
-            elif this_arg in self._v.switches:
-                self.verbose = True
-            elif this_arg in self._s.switches:
-                self.students = this_val
-            elif this_arg in self._t.switches:
-                self.teachers = this_val
-            elif this_arg in self._o.switches:
-                self.output_dir = this_val
-            elif this_arg in self._c.switches:
-                self.chunk_size = int(this_val)
-            else:
-                if self.verbose:
-                    print("no known args... using defaults; to see args list, use:")
-                    print("                  python -m SsChallengeApp --help")
+        if args is not None:
+            # evaluate arguments
+            for this_arg, this_val in args:
+                if this_arg in self._h.switches:
+                    self.show_help()
+                    exit(0)
+                elif this_arg in self._v.switches:
+                    self.verbose = True
+                elif this_arg in self._s.switches:
+                    self.students = this_val
+                elif this_arg in self._t.switches:
+                    self.teachers = this_val
+                elif this_arg in self._o.switches:
+                    self.output_dir = this_val
+                elif this_arg in self._c.switches:
+                    self.chunk_size = int(this_val)
+                else:
+                    if self.verbose:
+                        print("no known args... using defaults; to see args list, use:")
+                        print("                  python -m SsChallengeApp --help")
+        else:
+            # defaults already set...
+            pass
 
         # respect verbosity arg
         if self.verbose:

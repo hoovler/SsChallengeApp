@@ -165,8 +165,8 @@ $ python3 SsChallengeApp
 
 ### Build
 
-To build the application into an executable:
+To build the application into an executable, use `pyinstaller` (`pip install pyinstaller`):
 
 ```bash
-$ pip install pyinstaller
+$ pyinstaller SsChallengeApp\__main__.py -n ssChallengeApp --onefile
 ```
