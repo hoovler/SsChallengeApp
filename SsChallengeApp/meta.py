@@ -33,7 +33,7 @@ class AppMeta:
         :param args:
         """
 
-        # set default class variables
+        # set default class variables and add to param list
         self.help = self._h.default
         self.verbose = self._v.default
         self.students = self._s.default
@@ -70,16 +70,20 @@ class AppMeta:
             self.show_meta()
 
     def show_meta(self):
+
         """
         printMeta: print the application metdata to the console.
         :return:
         """
         print("")
-        print(f"    Verbose [-v]:               '{self.verbose}'")
-        print(f"    Student data source [-s]:   '{self.students}'")
-        print(f"    Teacher data source [-f]:   '{self.teachers}'")
-        print(f"    Output directory [-o]:      '{self.output_dir}'")
-        print(f"    Chunk size [-c]:            '{self.chunk_size}'")
+        # print(f"    Verbose [-v]:               '{self.verbose}'")
+        # print(f"    Student data source [-s]:   '{self.students}'")
+        # print(f"    Teacher data source [-f]:   '{self.teachers}'")
+        # print(f"    Output directory [-o]:      '{self.output_dir}'")
+        # print(f"    Chunk size [-c]:            '{self.chunk_size}'")
+        for key in self.as_dict().keys():
+            val = self.as_dict().get(key)
+            print(f"{key}: [{val[1].switches}] = {val[0]}")
         print("")
 
     def show_help(self):
@@ -89,24 +93,24 @@ class AppMeta:
         print("")
         print(f"usage: python -m SsChallenge [{self._h.switches}] [{self._v.switches}]")
         print(f"                             [{self._s.switches} <filename>] "
-              f"[{self._t.switches} <filename>]")
-        print(f"                             [{self._o.switches} <directory>] "
-              f"[{self._c.switches} <int>]")
+              f"[{self._t.switches} <filename>] "
+              f"[{self._o.switches} <directory>]")
+        print(f"                             [{self._c.switches} <int>]")
         print("")
         print("If no arguements are provided, the following default values are used:")
         self.show_meta()
 
-    def as_dict(self):
+    def as_dict(self) -> dict:
         """
         Convert application metadata into a dictionary
         :return: {verbose:v, students:s, teachers:t, output_dir:o}
         """
         return {
-            "verbose": self.verbose,
-            "students": self.students,
-            "teachers": self.teachers,
-            "output_dir": self.output_dir,
-            "chunk_size": self.chunk_size
+            "verbose": [self.verbose, self._v],
+            "students": [self.students, self._s],
+            "teachers": [self.teachers, self._t],
+            "output_dir": [self.output_dir, self._o],
+            "chunk_size": [self.chunk_size, self._c]
         }
 
     def as_list(self):
