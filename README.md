@@ -6,7 +6,16 @@
 
 You can run the application directly from the source code, or using application binaries.  All commands herein are intended to be run from your operating system's default shell.  For example, **Windows** users would open the `Command Prompt`, **Mac** users would run them from `Terminal.app`, and **Linux** users would simply pick a terminal.
 
-Unless you're running the application executable, which has been made available via
+#### Latest Release
+
+You can find the appropriate executable in the [releases](https://github.com/hoovler/SsChallengeApp/tree/master/releases) directory:
+* [v1.0.0, Windows](https://github.com/hoovler/SsChallengeApp/raw/master/releases/v1.0.0/ssChallengeApp.exe) (**_current_**)
+
+Due to the nature of the assignment, it was seemingly impossible to avoid using the `pandas` Python package, which has a major impact on the total size of the binaries packaged into a single executable file.  Even after going through the application's `import` statements to `import` only the necessary classes from required modules, the single-file executable is a hefty **44 MB** in size!
+
+Therefore, since the repository's `release/` page only allows files that are **10 MB** or less, this project repository relies on [Git LFS](https://git-lfs.github.com/) to store the binary executables on GitHub servers using text pointers in the repository itself.
+
+#### Running Directly from Source
 
 To run the application directly from the source code:
 
