@@ -29,37 +29,41 @@ The requirements herein are extracted from the following [Data Python Exercise r
 I am going to assume that the proper `JSON` output format will be as such:
 
 ```json
-{
-  "student_a": {
+[
+  {
+    "student": "student_a",
     "cid": "cid_a",
     "teacher": "teacher_a"
   },
-  "student_b": {
+  {
+    "student": "student_b",
     "cid": "cid_a",
     "teacher": "teacher_a"
   },
-  "student_c": {
+  {
+    "student": "student_c",
     "cid": "cid_a",
     "teacher": "teacher_a"
   },
-  "student_n": {
+  {
+    "student": "student_n",
     "cid": "cid_n",
     "teacher": "teacher_n"
   }
-}
+]
 ```
 
 #### Architecture
-* All code is organized into python modules.
-* `__main__.py` file with a main function is used as the entry point.
-* code must include a `requirements.txt` file.
-* Unit tests and Integration tests are done to a professional level.
+3. All code is organized into python modules.
+4. `__main__.py` file with a main function is used as the entry point.
+5. code must include a `requirements.txt` file.
+6. Unit tests and Integration tests are done to a professional level.
 
 
 #### Style
-* All code is run through pylint and passes with a 10, **no exceptions**.
-* Notebooks will not be accepted. **no exceptions**. 
-* All code is organized into functions and classes.
+7. All code is run through pylint and passes with a 10, **no exceptions**.
+8. Notebooks will not be accepted. **no exceptions**. 
+9. All code is organized into functions and classes.
 
 ## Useful Information
 
