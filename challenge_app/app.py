@@ -3,7 +3,7 @@ app.py: The file containing the application's primary execution
 """
 from pathlib import Path
 from datetime import datetime
-from SsChallengeApp import AppMeta
+from challenge_app import AppMeta
 from pandas import DataFrame, read_parquet, read_csv
 
 

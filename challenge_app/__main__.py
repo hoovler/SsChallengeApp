@@ -3,7 +3,7 @@ __main__.py: The file containing the main entry point for the application.
 """
 import getopt
 from sys import argv, exit
-from SsChallengeApp import AppMeta, App
+from challenge_app import AppMeta, App
 
 
 def main():

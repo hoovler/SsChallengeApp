@@ -41,6 +41,10 @@ class AppMeta:
         self.output_dir = self._o.default
         self.chunk_size = self._c.default
 
+        print("=========args=========")
+        print(args)
+        print("")
+
         if args is not None:
             # evaluate arguments
             for this_arg, this_val in args:
@@ -60,7 +64,7 @@ class AppMeta:
                 else:
                     if self.verbose:
                         print("no known args... using defaults; to see args list, use:")
-                        print("                  python -m SsChallengeApp --help")
+                        print("                  python -m challenge_app --help")
         else:
             # defaults already set...
             pass
